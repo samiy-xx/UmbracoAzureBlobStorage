@@ -96,12 +96,12 @@ namespace idseefeld.de.UmbracoAzure
 
         private void CacheItem<T>(string key, T value)
         {
-            var uCache = HttpContext.Current.Cache;
+            var uCache = HttpContext.Current == null ? HttpRuntime.Cache : HttpContext.Current.Cache;
             uCache.Add(key, value, null, Cache.NoAbsoluteExpiration, new TimeSpan(1, 0, 0), CacheItemPriority.Default, null);
         }
         private static T GetItemFromCache<T>(string key)
         {
-            var uCache = HttpContext.Current.Cache;
+            var uCache = HttpContext.Current == null ? HttpRuntime.Cache : HttpContext.Current.Cache;
             T rVal = (T)uCache.Get(key);
             return rVal;
         }
@@ -261,7 +261,6 @@ namespace idseefeld.de.UmbracoAzure
             mediaContainer = CreateContainer(containerName, BlobContainerPublicAccessType.Blob);
             RootUrl = rootUrl + containerName + "/";
             RootPath = "/";
-
             this.logger = logger;
         }
 
